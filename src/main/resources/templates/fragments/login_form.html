@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+	rel="stylesheet">
+<link th:href="@{/styles.css}" rel="stylesheet" />
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+
+<title>Online Gradebook - Login</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+	<header
+		class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-md-3 col-lg-1 me-0 px-2" th:href="@{/}">
+			My Gradebook</a>
+	</header>
+
+	<main class="container align-self-center col-md-8 pt-4">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Log in</h5>
+				<hr>
+				<form th:action="@{/login}" th:object="${user}" method="post">
+					<div class="form-group mb-2">
+						<label for="username">Username</label> <input type="text"
+							class="form-control" id="username" th:field="*{username}"
+							th:errorclass="is-invalid">
+						<div class="invalid-feedback"
+							th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+					</div>
+					<div class="form-group mb-2">
+						<label for="password">Password</label> <input type="password"
+							class="form-control" id="password" th:field="*{password}"
+							th:errorclass="is-invalid">
+						<div class="invalid-feedback"
+							th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+					</div>
+					<button type="submit" class="btn btn-primary">Log in</button>
+					<p class="small fw-bold mt-2 pt-1 mb-0">
+						Don't have an account? <a th:href="@{/register}"
+							class="link-danger">Register</a>
+					</p>
+				</form>
+			</div>
+		</div>
+	</main>
+</body>
+</html>
