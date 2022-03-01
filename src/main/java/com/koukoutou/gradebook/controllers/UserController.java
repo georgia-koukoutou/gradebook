@@ -6,7 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -20,6 +20,9 @@ import com.koukoutou.gradebook.models.User;
 import com.koukoutou.gradebook.repositories.CourseGradeRepository;
 import com.koukoutou.gradebook.repositories.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class UserController {
 
@@ -28,6 +31,9 @@ public class UserController {
 
 	@Autowired
 	private CourseGradeRepository courseGradeRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
@@ -44,7 +50,6 @@ public class UserController {
 		if (errors != null && errors.getErrorCount() > 0) {
 			return "fragments/register_form";
 		} else {
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String encodedPassword = passwordEncoder.encode(newUser.getPassword());
 			newUser.setPassword(encodedPassword);
 
@@ -66,7 +71,7 @@ public class UserController {
 	@PostMapping("/login")
 	public String loginUser() {
 
-		return "layout";
+		return "index";
 	}
 
 	@PostMapping("/logout")
@@ -84,9 +89,21 @@ public class UserController {
 	@GetMapping("/courses")
 	public String showGrades(@AuthenticationPrincipal User user, Model model) {
 
+		double sumOfWeights = 0;
+		double sumOfGradesWeighted = 0;
+		double finalGrade = 0;
+
 		List<CourseGrade> userCourseGrades = courseGradeRepository.findByUserId(user.getId());
 		model.addAttribute("courseGrades", userCourseGrades);
-		System.out.println(userCourseGrades.toString());
+
+		for (CourseGrade courseGrade : userCourseGrades) {
+			sumOfWeights += courseGrade.getCourse().getWeight();
+			sumOfGradesWeighted += courseGrade.getGrade() * courseGrade.getCourse().getWeight();
+		}
+
+		finalGrade = sumOfGradesWeighted / sumOfWeights;
+		log.info("sum {}", finalGrade);
+		model.addAttribute("grade", finalGrade);
 
 		return "fragments/courses";
 	}
@@ -100,4 +117,25 @@ public class UserController {
 		return "redirect:/courses";
 	}
 
+	@GetMapping("/account")
+	public String showAccountInfo(@AuthenticationPrincipal User user, Model model) {
+
+		model.addAttribute("user", user);
+
+		return "fragments/account";
+	}
+
+	@PostMapping("/account")
+	public String updateAccountInfo(@Valid User user, Errors errors, Model model) {
+
+		if (errors != null && errors.getErrorCount() > 0) {
+			return "fragments/account";
+		} else {
+			String encodedPassword = passwordEncoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
+			userRepository.save(user);
+		}
+
+		return "redirect:/account";
+	}
 }

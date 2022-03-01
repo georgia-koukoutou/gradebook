@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+<title>Account</title>
+</head>
+<body>
+    <div layout:fragment="content" class="container align-self-center">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Account Info</h5>
+                <hr>
+                <form th:action="@{/account}" th:object="${user}" method="post">
+                    <div class="form-group mb-2">
+                        <label for="username">Username</label> <input type="text"
+                            class="form-control" id="username" th:field="*{username}"
+                            th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}"
+                            th:errors="*{username}"></div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="email">Email</label> <input type="email"
+                            class="form-control" id="email" th:field="*{email}"
+                            th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                            th:errors="*{email}"></div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="password">Password</label> <input type="password"
+                            class="form-control" id="password" th:field="*{password}"
+                            th:errorclass="is-invalid">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}"
+                            th:errors="*{password}"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Info</button>
+                    <input type="hidden" th:field="*{id}">
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

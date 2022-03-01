@@ -24,15 +24,21 @@
 					<td th:text="${courseGrade.course.ects}"></td>
 					<td th:text="${courseGrade.course.weight}"></td>
 					<td th:text="${courseGrade.grade}"></td>
-					<td><a th:href="@{/course/{id}(id = ${courseGrade.course.id})}"
+					<td><a
+						th:href="@{/course/{id}(id = ${courseGrade.course.id})}"
 						class="btn btn-primary btn-sm">Edit</a>
 						<button type="button" th:attr="data-id=${courseGrade.course.id}"
 							class="btn btn-danger btn-sm" data-bs-toggle="modal"
 							data-bs-target="#deleteConfirmationModal">Delete</button></td>
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td class="text-end fw-bold" colspan="4">Total Grade:</td>
+					<td id="grade" class="text-center fw-bold" th:text="${#numbers.formatDecimal(grade,1,2)}"></td>
+				</tr>
+			</tfoot>
 		</table>
-
 
 		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1"
 			aria-labelledby="deleteConfirmationModal" aria-hidden="true">

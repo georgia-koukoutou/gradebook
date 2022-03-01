@@ -53,8 +53,6 @@ public class AppController {
 				Course course = courseRepository.findById(Long.parseLong(courseIds[i])).get();
 				double grade = Double.parseDouble(grades[i]);
 
-				log.info("Course: {} Grade: {} - {}", courseIds[i], grades[i], course);
-
 				CourseGrade courseGrade = new CourseGrade();
 				courseGrade.setUser(user);
 				courseGrade.setCourse(course);
