@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Add new course</h5>
 				<hr>
-				<form th:action="@{/}" th:object="${course}" method="post">
+				<form th:action="@{/}" method="post">
 					<table class="table table-bordered table-striped" id="course_table">
 						<thead>
 							<tr>
@@ -36,19 +36,66 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td class="text-end" colspan="1">Total Grade:</td>
-								<td id="sum_column" class="text-end"></td>
+								<td></td>
+								<td></td>
 								<td>
-									<button type="button" id="add_detail_btn"
+									<button type="button" id="add_course_btn"
 										class="btn btn-sm btn-primary">Add</button>
 								</td>
 							</tr>
 						</tfoot>
 					</table>
-					<button type="submit" class="btn btn-primary">Save to Gradebook</button>
+					<button type="submit" class="btn btn-primary">Save to
+						Gradebook</button>
 				</form>
 			</div>
 		</div>
+		<script th:inline="javascript">
+
+            $(function() {
+                
+                const courses = /*[[${courses}]]*/;
+
+                let options = "";
+                for (course of courses) {
+                    options += `<option value="${course.id}">${course.name}</option>`;
+                }
+                const tbody = $("#course_table").find("tbody");
+                
+                $("#course_table").on("click", ".delete_btn", function(event) {
+
+                    event.preventDefault();
+                    
+                    $(this).closest("tr").remove();
+                });
+    
+                $("#add_course_btn").on("click", function(event) {
+
+                    event.preventDefault();
+
+                    const row_count = tbody.find("tr").length;
+
+                    tbody.append(
+                            `
+                            <tr>
+                                <td>
+                                    <select class="form-control" name="course_id">
+                                        <option value="">Please select a course</option>
+                                        ${options}
+                                    </select>
+                                </td>
+                                <td><input type="number" step="0.1" min=5 max=10
+                                class="form-control" name="course_grade" /></td>
+                                <td><button type="button" class="btn btn-sm btn-danger delete_btn">Delete</button></td>
+                            </tr>
+                            `
+                        );
+
+                });
+                
+                
+            });
+        </script>
 	</div>
 </body>
 </html>

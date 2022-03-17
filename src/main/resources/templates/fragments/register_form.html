@@ -23,7 +23,7 @@
 	<header
 		class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
 		<a class="navbar-brand col-md-3 col-lg-1 me-0 px-2" th:href="@{/}">
-			My Gradebook</a>
+			Gradebook</a>
 	</header>
 
 	<main class="container align-self-center col-md-8 pt-4">
@@ -31,8 +31,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Register</h5>
 				<hr>
-				<form th:action="@{/register}" th:object="${user}"
-					method="post">
+				<form th:action="@{/register}" th:object="${user}" method="post">
 					<div class="form-group mb-2">
 						<label for="username">Username</label> <input type="text"
 							class="form-control" id="username" th:field="*{username}"
@@ -55,6 +54,10 @@
 							th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 					</div>
 					<button type="submit" class="btn btn-primary">Register</button>
+					<p class="small fw-bold mt-2 pt-1 mb-0">
+						Already have an account? <a th:href="@{/login}"
+							class="link-danger">Log in</a>
+					</p>
 				</form>
 			</div>
 		</div>

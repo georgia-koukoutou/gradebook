@@ -10,16 +10,20 @@ import com.koukoutou.gradebook.repositories.UserRepository;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-	private UserRepository userRepository;
+    private UserRepository userRepository;
 
-	public MyUserDetailsService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+    public MyUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		return this.userRepository.findByUsername(username);
-	}
+        UserDetails user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return user;
+    }
 
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+
+<head>
+<title>Edit Course</title>
+</head>
+
+<body>
+	<div layout:fragment="content" class="container align-self-center">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Edit course</h5>
+				<hr>
+				<form th:action="@{/update}" method="post">
+					<input type="hidden" name="id" th:value="${courseGrade.course.id}">
+					<table class="table table-bordered table-striped" id="course_table">
+						<thead>
+							<tr>
+								<th class="text-center fw-bold">Name</th>
+								<th class="text-center fw-bold">Grade</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td th:text="${courseGrade.course.name}"></td>
+								<td><input type="number" step="0.1" min=5 max=10
+									class="form-control" name="grade"
+									th:value="${courseGrade.grade}" /></td>
+							</tr>
+						</tbody>
+					</table>
+					<button type="submit" class="btn btn-primary">Edit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

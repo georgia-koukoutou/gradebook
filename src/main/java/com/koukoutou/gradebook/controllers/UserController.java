@@ -1,36 +1,24 @@
 package com.koukoutou.gradebook.controllers;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.koukoutou.gradebook.models.CourseGrade;
 import com.koukoutou.gradebook.models.User;
-import com.koukoutou.gradebook.repositories.CourseGradeRepository;
 import com.koukoutou.gradebook.repositories.UserRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private CourseGradeRepository courseGradeRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -84,37 +72,6 @@ public class UserController {
 	public String showLoginError(Model model) {
 
 		return "fragments/login_error";
-	}
-
-	@GetMapping("/courses")
-	public String showGrades(@AuthenticationPrincipal User user, Model model) {
-
-		double sumOfWeights = 0;
-		double sumOfGradesWeighted = 0;
-		double finalGrade = 0;
-
-		List<CourseGrade> userCourseGrades = courseGradeRepository.findByUserId(user.getId());
-		model.addAttribute("courseGrades", userCourseGrades);
-
-		for (CourseGrade courseGrade : userCourseGrades) {
-			sumOfWeights += courseGrade.getCourse().getWeight();
-			sumOfGradesWeighted += courseGrade.getGrade() * courseGrade.getCourse().getWeight();
-		}
-
-		finalGrade = sumOfGradesWeighted / sumOfWeights;
-		log.info("sum {}", finalGrade);
-		model.addAttribute("grade", finalGrade);
-
-		return "fragments/courses";
-	}
-
-	@Transactional
-	@PostMapping("/delete")
-	public String deleteCourse(@AuthenticationPrincipal User user, @RequestParam("id") Long id) {
-
-		courseGradeRepository.deleteByCourseIdAndUserId(id, user.getId());
-
-		return "redirect:/courses";
 	}
 
 	@GetMapping("/account")

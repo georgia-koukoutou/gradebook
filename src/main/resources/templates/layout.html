@@ -25,7 +25,7 @@
 	<header
 		class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
 		<a class="navbar-brand col-md-3 col-lg-1 fs-6" th:href="@{/}">
-			My Gradebook</a>
+			Gradebook</a>
 	</header>
 
 	<div class="container-fluid">
@@ -33,14 +33,14 @@
       <nav id="sidebarMenu" class="col-md-1 d-md-block bg-light sidebar collapse">
         <div class="position-sticky pt-3">
           <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" th:href="@{/}">
+            <li>
+              <a th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" class="nav-link" aria-current="page" th:href="@{/}">
                 <i class="fas fa-home"></i>
                 Home
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/courses}">
+            <li>
+              <a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/course') ? 'active':''}" class="nav-link" th:href="@{/courses}">
                 <i class="fas fa-graduation-cap"></i>
                 Grades
               </a>
@@ -52,7 +52,7 @@
               </button>
               <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                  <li><a th:href="@{/account}" class="link-dark rounded">Profile</a></li>
+                  <li><a th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account') ? 'active':''}" th:href="@{/account}" class="link-dark rounded nav-link">Profile</a></li>
                   <li><a th:href="@{/logout}" class="link-dark rounded">Sign out</a></li>
                 </ul>
               </div>
